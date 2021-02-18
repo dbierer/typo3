@@ -11,6 +11,7 @@ export TYPO3_URL=$6
 export TYPO3_DRIVER=$7
 export TYPO3_BASE=$8
 export TYPO3_INTRO_PKG=$9
+export TYPO3_CFG_FN=$10
 if [[ "$TYPO3_DRIVER" = "pdo_mysql" ]]; then
     /etc/init.d/mysql start
     sleep 5
@@ -35,13 +36,15 @@ else
     vendor/bin/typo3cms install:setup -f --database-host-name localhost --database-driver $TYPO3_DRIVER --database-name $TYPO3_DB_NAME --database-user-name $TYPO3_DB_USER --database-user-password "$TYPO3_DB_PWD" --admin-user-name $TYPO3_ADMIN_USER --admin-password "$TYPO3_ADMIN_PWD" --site-name $TYPO3_URL --web-server-config apache --site-setup-type site --site-base-url /typo3/ --no-interaction
 fi
 if [[ -z "$TYPO3_INTRO_PKG" ]]; then
-    vendor/bin/typo3cms database:updateschema --no-interaction
+    echo "No intro package installed ..."
 else
     php composer.phar req --update-with-all-dependencies typo3/cms-introduction
-    vendor/bin/typo3cms database:updateschema --no-interaction
     vendor/bin/typo3cms extension:activate bootstrap_package
     vendor/bin/typo3cms extension:activate introduction
+    mkdir -vp config/sites/main
+    cp $TYPO3_CFG_FN config/sites/main/config.yaml
 fi
+vendor/bin/typo3cms database:updateschema --no-interaction
 vendor/bin/typo3cms cache:flush
 if [[ $? -gt 0 ]]; then
     echo -e "\ntypo3 Installation ERROR!  Aborting!\n"

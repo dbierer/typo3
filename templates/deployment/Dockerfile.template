@@ -23,7 +23,7 @@ RUN \
     /srv/repo/src/files/phpmyadmin_LfPHP_setup.sh
 RUN \
     echo "Setting up Typo3 ..." && \
-    /srv/repo/src/files/typo3_LfPHP_setup.sh %%DB_USER%% "%%DB_PWD%%" typo3_%%DB_NAME%% %%ADMIN_USER%% "%%ADMIN_PWD%%"  %%URL%% pdo_sqlite %%BASE_DIR%% Y
+    /srv/repo/src/files/typo3_LfPHP_setup.sh %%DB_USER%% "%%DB_PWD%%" typo3_%%DB_NAME%% %%ADMIN_USER%% "%%ADMIN_PWD%%"  %%URL%% pdo_sqlite %%BASE_DIR%% Y /srv/repo/src/files/main.config.yaml
 RUN \
     echo "Setting up Apache ..." && \
     mv -f /srv/www /srv/www.OLD && \

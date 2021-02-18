@@ -47,6 +47,5 @@ if [[ $? -gt 0 ]]; then
     echo -e "\ntypo3 Installation ERROR!  Aborting!\n"
     exit 1
 fi
-chown -R apache:apache $TYPO3_BASE/typo3
 echo -e "\ntypo3 installed into $TYPO3_BASE/typo3\n"
 cd

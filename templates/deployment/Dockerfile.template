@@ -7,7 +7,9 @@ RUN \
 RUN \
     echo "Clone from repo ..." && \
     rm -rf /srv/repo && \
-    git clone https://%%REPO_USER%%:%%REPO_TOKEN%%@github.com/%%REPO_USER%%/%%REPO_URL%%.git %%REPO_BRANCH%% /srv/repo && \
+    git clone https://%%REPO_USER%%:%%REPO_TOKEN%%@github.com/%%REPO_USER%%/%%REPO_URL%%.git /srv/repo && \
+    cd /srv/repo && \
+    git checkout  %%REPO_BRANCH%% && \
     chmod +x /srv/repo/src/files/*.sh
 RUN \
     echo "Assigning database permissions ..." && \
@@ -18,7 +20,7 @@ RUN \
     mysql -uroot -v -e "FLUSH PRIVILEGES;"
 RUN \
     echo "Setting up phpMyAdmin ..." && \
-    %%BASE_DIR%%/%%URL%%/src/files/phpmyadmin_LfPHP_setup.sh
+    /srv/repo/src/files/phpmyadmin_LfPHP_setup.sh
 RUN \
     echo "Setting up Typo3 ..." && \
     /srv/repo/src/files/typo3_LfPHP_setup.sh %%DB_USER%% "%%DB_PWD%%" typo3_%%DB_NAME%% %%ADMIN_USER%% "%%ADMIN_PWD%%"  %%URL%% pdo_sqlite %%BASE_DIR%% Y

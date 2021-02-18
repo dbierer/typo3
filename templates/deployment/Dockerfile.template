@@ -1,0 +1,33 @@
+FROM asclinux/linuxforphp-8.2-ultimate:7.4-nts
+MAINTAINER doug.bierer@etista.com
+RUN \
+    echo "Setting up for docker-compose ..." && \
+    rm -rf /srv/repo && \
+    mkdir /srv/repo
+RUN \
+    echo "Clone from repo ..." && \
+    rm -rf /srv/repo && \
+    git clone https://%%REPO_USER%%:%%REPO_TOKEN%%@github.com/%%REPO_USER%%/%%REPO_URL%%.git %%REPO_BRANCH%% /srv/repo && \
+    chmod +x /srv/repo/src/files/*.sh
+RUN \
+    echo "Assigning database permissions ..." && \
+    /etc/init.d/mysql start && \
+    sleep 5 && \
+    mysql -uroot -v -e "CREATE USER IF NOT EXISTS '%%DB_USER%%'@'localhost' IDENTIFIED BY '%%DB_PWD%%';" && \
+    mysql -uroot -v -e "GRANT ALL PRIVILEGES ON *.* TO '%%DB_USER%%'@'localhost';" && \
+    mysql -uroot -v -e "FLUSH PRIVILEGES;"
+RUN \
+    echo "Setting up phpMyAdmin ..." && \
+    %%BASE_DIR%%/%%URL%%/src/files/phpmyadmin_LfPHP_setup.sh
+RUN \
+    echo "Setting up Typo3 ..." && \
+    /srv/repo/src/files/typo3_LfPHP_setup.sh %%DB_USER%% "%%DB_PWD%%" typo3_%%DB_NAME%% %%ADMIN_USER%% "%%ADMIN_PWD%%"  %%URL%% pdo_sqlite %%BASE_DIR%% Y
+RUN \
+    echo "Setting up Apache ..." && \
+    mv -f /srv/www /srv/www.OLD && \
+    ln -sfv %%BASE_DIR%%/typo3/public /srv/www && \
+    echo "ServerName %%URL%%" >> /etc/httpd/httpd.conf && \
+    chown apache:apache /srv/www && \
+    chown -R apache:apache %%BASE_DIR%%/typo3 && \
+    chmod -R 775 %%BASE_DIR%%/typo3
+CMD lfphp --mysql --phpfpm --apache

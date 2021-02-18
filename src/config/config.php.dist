@@ -1,0 +1,132 @@
+<?php
+$config = [
+	'COMPANY_EMAIL' => [
+		'to'   => 'doug.bierer@etista.com',
+		'cc'   => 'doug@unlikelysource.com',
+		'from' => 'services@linuxforphp.com',
+		'SUCCESS' => '<span style="color:green;font-weight:700;">Thanks!  Your request has been sent.</span>',
+		'ERROR'   => '<span style="color:red;font-weight:700;">Sorry!  Your request did not go through.</span>',
+		'phpmailer' => [
+			'smtp'          => TRUE, 			// Use SMTP (true) or PHP Mail() function (false)
+			'smtp_host'     => '%%SMTP_HOST%%', // SMTP server address - URL or IP
+			'smtp_port'     => 587, 			// 25 (standard), 465 (SSL), or 587 (TLS)
+			'smtp_auth'     => TRUE, 			// SMTP Authentication - PLAIN
+			'smtp_username' => '%%SMTP_USERNAME%%', // Username if smtp_auth is true
+			'smtp_password' => '%%SMTP_PASSWORD%%', // Password if smtp_auth is true
+			'smtp_secure'   => 'tls', // Supported SMTP secure connection - 'none, 'ssl', or 'tls'
+			'from_address'  => 'postmaster@linuxforphp.com',
+			'from_name'     => 'Linux for PHP Administrator',
+			'reply_address' => 'services@linuxforphp.com',
+			'reply_name'    => 'Linux for PHP Cloud Services',
+		],
+	],
+	'MSG_MARKER'    => '<!-- %%MESSAGES%% -->',
+	'CONTACT_LOG'   => BASE_DIR . '/logs/contact.log',
+	'DELIM'         => '%%',
+	'PLANS_URL'	=> 'https://linuxforphp.com/plans/specs/',
+	'PLANS' => [
+		'Cumulus' => [
+			'key' => 1,
+			'price' => 10,
+			'discount' => 5,
+			'features' => ['1 CPU per cycle (min. Xeon @ 3.0 GHz)','1 GB of RAM','1 GB of Swap Space','10 GB of Storage','Unlimited Bandwidth','Free Database'],
+		],
+		'Stratus' => [
+			'key' => 2,
+			'price' => 20,
+			'discount' => 10,
+			'features' => ['1 CPU per cycle (min. Xeon @ 3.0 GHz)','2 GB of RAM','2 GB of Swap Space','20 GB of Storage','Unlimited Bandwidth','Two Free Databases'],
+		],
+		'Altocumulus' => [
+			'key' => 3,
+			'price' => 40,
+			'discount' => 20,
+			'features' => ['2 CPUs per cycle (min. Xeon @ 3.0 GHz)','4 GB of RAM','4 GB of Swap Space','40 GB of Storage','Increased Processor Priority','Unlimited Bandwidth','Unlimited Databases'],
+		],
+		'Cirrus' => [
+			'key' => 4,
+			'price' => 80,
+			'discount' => 40,
+			'features' => ['4 CPUs per cycle (min. Xeon @ 3.0 GHz)','8 GB of RAM','8 GB of Swap Space','60 GB of Storage','High Processor Priority','Unlimited Bandwidth','Unlimited Databases'],
+		],
+		'Cirrus Plus' => [
+			'key' => 8,
+			'price' => 140,
+			'discount' => 70,
+			'features' => ['8 CPUs per cycle (min. Xeon @ 3.0 GHz)','16 GB of RAM','16 GB of Swap Space','120 GB of Storage','Highest Processor Priority','Unlimited Bandwidth','Unlimited Databases'],
+		],
+	],
+	'QUOTE' => [
+		'recommendations' => [
+			0 => "Sorry!  We don't have sufficient information to put together a quote for you.  <br />If you included your email address we'll get back to you. <br />Otherwise, for more information on current plans on offer, <a href='/plans'>click here</a>.",
+			1 => 'Based on the information you provided us, we recommend the %s plan.  <br />Here is a list of features: %s <br />The current price is $%.2f USD per month. Until the end of this year, <b>you only pay $%.2f per month</b>! <br />This is our small way of helping minimize the financial suffering caused by the pandemic.  <br />For more information <a href="%s">click here</a>.',
+		],
+		'fields' => [
+			'name'    => 'text',
+			'email'   => 'email',
+			'additional' => 'textarea',
+		],
+		'questions' => [
+			'business_type' => ['retail','financial','health','web development','other'],
+			'company_size'  => ['just me','2 to 10','11 to 100','more than 100'],
+			// traffic
+			'visitors_per_month' => ['couple dozen','few hundred','thousands','too many to count','not sure'],
+			// storage
+			'how_many_web_pages' => ['a dozen or so', 'several dozen', 'hundreds','thousands','too many to count','not sure'],
+			// persistant connections
+			'how_many_users' => ['couple dozen users','a hundred or so','thousands','too many to count','not sure'],
+		],
+		'decision_matrix' => [
+			'Cumulus' => [
+				'key' => 1,
+				'score' => 0,
+				'visitors_per_month' => ['dozen'],
+				'how_many_web_pages' => ['dozen'],
+				'how_many_users' => ['dozen'],
+			],
+			'Stratus' => [
+				'key' => 2,
+				'score' => 0,
+				'visitors_per_month' => ['dozen hundred'],
+				'how_many_web_pages' => ['several','hundreds'],
+				'how_many_users' => ['dozen','hundred'],
+			],
+			'Altocumulus' => [
+				'key' => 3,
+				'score' => 0,
+				'visitors_per_month' => ['hundreds','thousands','too many'],
+				'how_many_web_pages' => ['hundreds','thousands'],
+				'how_many_users' => ['hundred','thousands'],
+			],
+			'Cirrus' => [
+				'key' => 4,
+				'score' => 0,
+				'visitors_per_month' => ['thousands','too many'],
+				'how_many_web_pages' => ['thousands','too many'],
+				'how_many_users' => ['hundred','thousands'],
+			],
+			'Cirrus Plus' => [
+				'key' => 8,
+				'score' => 0,
+				'visitors_per_month' => ['too many'],
+				'how_many_web_pages' => ['too many'],
+				'how_many_users' => ['thousands','too many'],
+			],
+		],
+	],
+	'CAPTCHA' => [
+		'input_tag_name' => 'phrase',
+		'sess_hash_key'  => 'hash',
+	],
+	'tags' => [
+		'PLANS'    => [0, 1, 3],
+		'CLIENTS'  => [0, 3],
+		'ARTICLES' => [0, 3],
+		'SLIDERS'  => [0],
+		'SERVICES' => [0, 3],
+		'PROJECTS' => [0, 3],
+		'TESTAMENT'=> [0, 3],
+		'TEAM'     => [0]
+	],
+];
+return $config;
